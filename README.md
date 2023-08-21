@@ -2,11 +2,11 @@
 
 ## Environment variables
 
-`VRRP_PASS` (no default, mandatory): VRRP password
-`VRRP_PEER_GROUPS` (no default, mandatory): nodes IPs used to setup VRRP (see below)
-`CHK_PROTO` (default: `https`): health check proto on Ingress Controller (no TLS check)
-`CHK_PORT` (default: `443`): Ingress Controller's main port used for health check and listening IPs detection
-`CHK_URI` (default: `/healthz`): health check URI on Ingress Controller
+- `VRRP_PASS` (no default, mandatory): VRRP password
+- `VRRP_PEER_GROUPS` (no default, mandatory): nodes IPs used to setup VRRP (see below)
+- `CHK_PROTO` (default: `https`): health check proto on Ingress Controller (no TLS check)
+- `CHK_PORT` (default: `443`): Ingress Controller's main port used for health check and listening IPs detection
+- `CHK_URI` (default: `/healthz`): health check URI on Ingress Controller
 
 ## VRRP peer groups
 
