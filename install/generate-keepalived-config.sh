@@ -40,7 +40,6 @@ vrrp_instance VI_$VRRP_ID {
     auth_pass "$VRRP_PASS"
   }
 
-  vrrp_check_unicast_src
   unicast_src_ip $VRRP_SELF_IP
   unicast_peer {
 EOF
@@ -100,6 +99,15 @@ EOF
 EOF
 }
 
+function gen_global_defs() {
+  cat - <<EOF
+global_defs {
+  vrrp_check_unicast_src
+}
+
+EOF
+}
+
 function get_managed_ips() {
   ip a | grep -Po "\b($(grep -Po '[^|]+' <<<"$VRRP_PEER_GROUPS" | cut -d';' -f1 | cut -d',' -f1 | xargs | tr ' ' '|'))\b"
   return 0
@@ -129,6 +137,8 @@ if [ -z "$MANAGED_IPS" ] ; then MANAGED_IPS=$(get_managed_ips) ; fi
 declare -a MANAGED_IPS=(${MANAGED_IPS[@]})
 
 VRRP_IDS=$(seq 1 ${#MANAGED_IPS[@]})
+
+gen_global_defs
 
 for VRRP_ID in ${VRRP_IDS[@]} ; do
   CHK_IP=${MANAGED_IPS[$(( $VRRP_ID - 1))]}
