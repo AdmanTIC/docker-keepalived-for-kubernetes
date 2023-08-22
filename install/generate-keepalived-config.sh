@@ -62,13 +62,13 @@ EOF
 EOF
   fi
 
-  if [ -n "$(get_my_gateway)" ] && [ -n "$(get_my_vips)" ] ; then
+  if [ -n "$(get_my_gateways)" ] && [ -n "$(get_my_vips)" ] ; then
     cat - <<EOF
   virtual_routes {
 EOF
     for VIP in $(get_my_vips) ; do
-      for GW in $(get_my_vips) ; do
-        echo "    src $VIP to 0.0.0.0/0 via $GW dev $VRRP_IF"
+      for GW in $(get_my_gateways) ; do
+        echo "    src ${VIP/\/*/} to 0.0.0.0/0 via $GW dev $VRRP_IF"
       done
     done
     cat - <<EOF
@@ -129,7 +129,7 @@ function get_my_vips() {
   get_my_peer_group | grep -Po ";\K((\d+\.){3}\d+(/\d+)?)" | sort
 }
 
-function get_my_gateway() {
+function get_my_gateways() {
   get_my_peer_group | grep -Po ",\K((\d+\.){3}\d+(/\d+)?)" | sort
 }
 
