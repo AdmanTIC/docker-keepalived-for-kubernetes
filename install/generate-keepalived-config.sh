@@ -100,9 +100,8 @@ EOF
 EOF
 }
 
-function get_ips_listening_port() {
-  PORT=${1:-$CHK_PORT}
-  netstat -lnt | grep -Po "\d+\.\d+\.\d+\.\d+:$PORT" | cut -d: -f1 | sort | xargs
+function get_managed_ips() {
+  ip a | grep -Po "\b($(grep -Po '[^|]+' <<<"$VRRP_PEER_GROUPS" | cut -d';' -f1 | cut -d',' -f1 | xargs | tr ' ' '|'))\b"
   return 0
 }
 
@@ -126,7 +125,7 @@ function get_my_gateway() {
   get_my_peer_group | grep -Po ",\K((\d+\.){3}\d+(/\d+)?)" | sort
 }
 
-if [ -z "$MANAGED_IPS" ] ; then MANAGED_IPS=$(get_ips_listening_port) ; fi
+if [ -z "$MANAGED_IPS" ] ; then MANAGED_IPS=$(get_managed_ips) ; fi
 declare -a MANAGED_IPS=(${MANAGED_IPS[@]})
 
 VRRP_IDS=$(seq 1 ${#MANAGED_IPS[@]})
