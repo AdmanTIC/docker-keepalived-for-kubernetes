@@ -7,7 +7,8 @@ RUN set -ex \
       patch \
       bash \
       keepalived \
-      curl
+      curl \
+      iptables
 
 COPY install /
 
