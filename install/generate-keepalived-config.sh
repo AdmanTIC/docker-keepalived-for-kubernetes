@@ -8,10 +8,11 @@ function gen_chk_script() {
   CHK_IP=${CHK_IP?"You must provide CHK_IP"}
   CHK_PORT=${CHK_PORT:-443}
   CHK_URI=${CHK_URI:-/healthz}
+  CHK_ALLOWED_HTTP_CODES=${CHK_ALLOWED_HTTP_CODES:-}
   VRRP_ID=${VRRP_ID?"You must provide VRRP_ID"}
   cat - <<EOF
 vrrp_script chk_http_$VRRP_ID {
-  script "/usr/bin/curl -fsk $CHK_PROTO://$CHK_IP:$CHK_PORT$CHK_URI"
+  script "/chk_http.sh '$CHK_PROTO://$CHK_IP:$CHK_PORT$CHK_URI' '$CHK_ALLOWED_HTTP_CODES'"
   interval 5
   fall 2
   rise 2
